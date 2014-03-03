@@ -1,0 +1,123 @@
+/* LinkedIn Basic Profile       */
+/* LinkedIn Contact Information */
+
+#linkedin_basic_profile {
+    border: 1px solid #D1D1D1;
+    padding: 10px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    background: -webkit-linear-gradient(#ffffff, #f2f2f2);
+    background: -o-linear-gradient(#ffffff, #f2f2f2);
+    background: -moz-linear-gradient(#ffffff, #f2f2f2);
+    background: linear-gradient(#ffffff, #f2f2f2);
+}
+#linkedin_profile_picture {
+    float: right;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 80px;
+    height: 80px;
+    padding: 2px;
+    border: 1px solid #E6E6E6;
+}
+#linkedin_basic_profile h2 {
+    margin: 5px 0;
+}
+#linkedin_basic_profile #headline {
+    font-weight: bold;
+}
+
+/* LinkedIn Full Profile */
+#linkedin_full_profile,
+#linkedin_contact_info {
+    border: 1px solid #D1D1D1;
+    padding: 10px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    background: -webkit-linear-gradient(#ffffff, #f2f2f2);
+    background: -o-linear-gradient(#ffffff, #f2f2f2);
+    background: -moz-linear-gradient(#ffffff, #f2f2f2);
+    background: linear-gradient(#ffffff, #f2f2f2);
+    margin-bottom: 10px;
+}
+#linkedin_big_profile_picture {
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 104px;
+    height: 104px;
+    padding: 2px;
+    border: 1px solid #E6E6E6;
+}
+#linkedin_full_profile #name,
+#linkedin_contact_info #name {
+    font-family: serif;
+    font-size: 2em;
+    line-height: 1.4em;
+}
+#linkedin_full_profile #headline,
+#linkedin_contact_info #headline {
+    font-size: 1.4em;
+    line-height: 1.4em;
+}
+#linkedin_full_profile #location,
+#linkedin_contact_info #location {
+    color: #666666;
+}
+#linkedin_full_profile #overview,
+#linkedin_contact_info #overview {
+    border-top: 1px dashed #D1D1D1;
+}
+#linkedin_full_profile #overview dt,
+#linkedin_contact_info #overview dt {
+    color: #666666;
+    margin: 0 0 10px;
+    position: relative;
+    z-index: 1;
+    width: 104px;
+    text-align: right;
+}
+#linkedin_full_profile #overview dd,
+#linkedin_contact_info #overview dd {
+    margin: -2.1em 10px 0px 4px;
+    overflow: hidden;
+    padding: 0 0 6px 116px;
+}
+
+#linkedin_full_profile_summary h2,
+#linkedin_full_profile_experience h2,
+#linkedin_full_profile_languages h2,
+#linkedin_full_profile_skills h2,
+#linkedin_full_profile_education h2,
+#linkedin_full_profile_groups h2
+{
+    color: #A1A1A1;
+    width: 100%;
+    padding: 10px 10px 0 10px;
+    border-bottom: 2px solid #DDDDDD;
+    font-size: 1.4em;
+    font-weight: normal;
+}
+#linkedin_full_profile_experience h4,
+#linkedin_full_profile_education h4 {
+    margin-bottom: 0;
+}
+#linkedin_full_profile_summary #content,
+#linkedin_full_profile_experience #content,
+#linkedin_full_profile_languages #content,
+#linkedin_full_profile_skills #content,
+#linkedin_full_profile_education #content
+{
+    margin: 0 10px;
+}
+#linkedin_full_profile_skills span {
+    margin: 2px;
+    background-color: #E6E6E6;
+    padding: 2px 5px;
+    display: inline-block;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
