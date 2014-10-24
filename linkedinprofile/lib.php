@@ -1,21 +1,5 @@
 <?php
 /**
- * Mahara: Electronic portfolio, weblog, resume builder and social networking
- * Copyright (C) 2006-2009 Catalyst IT Ltd and others; see:
- *                         http://wiki.mahara.org/Contributors
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @package    mahara
  * @subpackage blocktype-linkedinprofile
@@ -57,7 +41,6 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
         $owner = $instance->get_view()->get('owner');
 
         $profile = self::get_user_profile($type, $owner);
-		//log_debug($profile);
         $smarty = smarty_core();
         $smarty->assign('profile', $profile);
         return $smarty->fetch('blocktype:linkedinprofile:' . $type . '.tpl');
@@ -140,19 +123,16 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
             'legend' => get_string('applicationinfo', 'blocktype.linkedinprofile'),
             'elements' => array(
                 'applicationname' => array(
-                    'type'         => 'text',
-                    'title'        => get_string('applicationname', 'blocktype.linkedinprofile'),
-                    'defaultvalue' => get_config('sitename'),
-                    'description'  => get_string('applicationnamedesc', 'blocktype.linkedinprofile'),
-                    'readonly'     => true,
+                    'type'        => 'html',
+                    'title'       => get_string('applicationname', 'blocktype.linkedinprofile'),
+                    'value'       => get_config('sitename'),
+                    'description' => get_string('applicationnamedesc', 'blocktype.linkedinprofile'),
                 ),
                 'websiteurl' => array(
-                    'type'         => 'text',
-                    'title'        => get_string('websiteurl', 'blocktype.linkedinprofile'),
-                    'defaultvalue' => get_config('wwwroot'),
-                    'size'         => 40,
-                    'description'  => get_string('websiteurldesc', 'blocktype.linkedinprofile'),
-                    'readonly'     => true,
+                    'type'        => 'html',
+                    'title'       => get_string('websiteurl', 'blocktype.linkedinprofile'),
+                    'value'       => get_config('wwwroot'),
+                    'description' => get_string('websiteurldesc', 'blocktype.linkedinprofile'),
                 ),
                 'applicationuse' => array(
                     'type'         => 'html',
@@ -186,6 +166,12 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                     'description'  => get_string('secretkeydesc', 'blocktype.linkedinprofile'),
                     'rules' => array('required' => true),
                 ),
+                'redirecturl' => array(
+                    'type'        => 'html',
+                    'title'       => get_string('redirecturl', 'blocktype.linkedinprofile'),
+                    'value'       => get_config('wwwroot') . 'blocktype/linkedinprofile/callback.php',
+                    'description' => get_string('redirecturldesc', 'blocktype.linkedinprofile'),
+                ),
             )
         );
         return array(
@@ -193,7 +179,7 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
         );
     }
 
-    public static function save_config_options($values) {
+    public static function save_config_options($form, $values) {
         set_config_plugin('blocktype', 'linkedinprofile', 'apikey', $values['apikey']);
         set_config_plugin('blocktype', 'linkedinprofile', 'secretkey', $values['secretkey']);
     }
