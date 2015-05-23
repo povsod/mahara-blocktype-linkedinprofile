@@ -220,7 +220,9 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
             $params = array(
                 'response_type' => 'code',
                 'client_id'     => $consumer->key,
-                'scope'         => 'r_fullprofile r_emailaddress r_contactinfo rw_groups',
+			    // As of February 12th 2015 do not pass optional parameter 'scope' anymore.
+				// More info: https://developer.linkedin.com/support/developer-program-transition#troubleshooting
+                //'scope'         => 'r_fullprofile r_emailaddress r_contactinfo rw_groups',
                 'state'         => 'newaccesstoken',
                 'redirect_uri'  => $consumer->callback,
             );
@@ -304,7 +306,9 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                 $params = array(
                     'response_type' => 'code',
                     'client_id'     => $consumer->key,
-                    'scope'         => 'r_fullprofile r_emailaddress r_contactinfo rw_groups',
+			    	// As of February 12th 2015 do not pass optional parameter 'scope' anymore.
+			    	// More info: https://developer.linkedin.com/support/developer-program-transition#troubleshooting
+                    //'scope'         => 'r_fullprofile r_emailaddress r_contactinfo rw_groups',
                     'state'         => $referring_page,
                     'redirect_uri'  => $consumer->callback,
                 );
