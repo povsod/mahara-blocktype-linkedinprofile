@@ -5,16 +5,16 @@
  * @subpackage blocktype-linkedinprofile
  * @author     Gregor Anzelj
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 2014 Gregor Anzelj, gregor.anzelj@gmail.com
+ * @copyright  (C) 2014-2016 Gregor Anzelj, info@povsod.com
  *
  */
 
 defined('INTERNAL') || die();
 
-$string['title'] = 'LinkedIn Profile';
-$string['description'] = 'Add your LinkedIn Profile';
+$string['title'] = 'LinkedIn profile';
+$string['description'] = 'Add your LinkedIn profile';
 
-// Linkedin profile strings
+// LinkedIn profile strings
 $string['Current'] = 'Current';
 $string['Past'] = 'Past';
 $string['Education'] = 'Education';

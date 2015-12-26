@@ -1,9 +1,15 @@
+/* Page editor left tab icon hack */
+.icon-linkedinprofile::before {
+    content: "\f08c";
+}
+
 /* LinkedIn Basic Profile       */
 /* LinkedIn Contact Information */
 
 #linkedin_basic_profile {
     border: 1px solid #D1D1D1;
     padding: 10px;
+	margin-top: 10px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     border-radius: 6px;
@@ -21,11 +27,11 @@
     padding: 2px;
     border: 1px solid #E6E6E6;
 }
-#linkedin_basic_profile h2 {
-    margin: 5px 0;
-}
-#linkedin_basic_profile #headline {
-    font-weight: bold;
+#linkedin_basic_profile table td,
+#linkedin_full_profile table td,
+#linkedin_contact_info table td {
+    border: 1px solid transparent !important;
+	font-size: 1em;
 }
 
 /* LinkedIn Full Profile */
@@ -33,6 +39,7 @@
 #linkedin_contact_info {
     border: 1px solid #D1D1D1;
     padding: 10px;
+	margin-top: 10px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     border-radius: 6px;
@@ -51,48 +58,33 @@
     padding: 2px;
     border: 1px solid #E6E6E6;
 }
+#linkedin_basic_profile #name,
 #linkedin_full_profile #name,
 #linkedin_contact_info #name {
-    font-family: serif;
     font-size: 2em;
-    line-height: 1.4em;
+	font-weight: bold;
+    line-height: 2em;
 }
+#linkedin_basic_profile #headline,
 #linkedin_full_profile #headline,
 #linkedin_contact_info #headline {
-    font-size: 1.4em;
+    font-size: 1.2em;
     line-height: 1.4em;
 }
+#linkedin_basic_profile #location,
 #linkedin_full_profile #location,
 #linkedin_contact_info #location {
     color: #666666;
+    font-size: 1.2em;
+    line-height: 1.4em;
+	padding-top: 4px;
 }
-#linkedin_full_profile #overview,
-#linkedin_contact_info #overview {
-    border-top: 1px dashed #D1D1D1;
-}
-#linkedin_full_profile #overview dt,
-#linkedin_contact_info #overview dt {
-    color: #666666;
-    margin: 0 0 10px;
-    position: relative;
-    z-index: 1;
-    width: 104px;
-    text-align: right;
-}
-#linkedin_full_profile #overview dd,
-#linkedin_contact_info #overview dd {
-    margin: -2.1em 10px 0px 4px;
-    overflow: hidden;
-    padding: 0 0 6px 116px;
-}
-
 #linkedin_full_profile_summary h2,
 #linkedin_full_profile_experience h2,
 #linkedin_full_profile_languages h2,
 #linkedin_full_profile_skills h2,
 #linkedin_full_profile_education h2,
-#linkedin_full_profile_groups h2
-{
+#linkedin_full_profile_groups h2 {
     color: #A1A1A1;
     width: 100%;
     padding: 10px 10px 0 10px;
@@ -108,8 +100,7 @@
 #linkedin_full_profile_experience #content,
 #linkedin_full_profile_languages #content,
 #linkedin_full_profile_skills #content,
-#linkedin_full_profile_education #content
-{
+#linkedin_full_profile_education #content {
     margin: 0 10px;
 }
 #linkedin_full_profile_skills span {

@@ -5,7 +5,7 @@
  * @subpackage blocktype-linkedinprofile
  * @author     Gregor Anzelj
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 2014 Gregor Anzelj, gregor.anzelj@gmail.com
+ * @copyright  (C) 2014-2016 Gregor Anzelj, info@povsod.com
  *
  */
 
@@ -36,5 +36,3 @@ else {
     // $state should be either view.php?id=X or blocks.php?id=X&
     redirect(get_config('wwwroot').'view/'.$state);
 }
-
-?>

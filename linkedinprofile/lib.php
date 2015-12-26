@@ -5,7 +5,7 @@
  * @subpackage blocktype-linkedinprofile
  * @author     Gregor Anzelj
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 2014 Gregor Anzelj, gregor.anzelj@gmail.com
+ * @copyright  (C) 2014-2016 Gregor Anzelj, info@povsod.com
  *
  */
 
@@ -29,6 +29,10 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
 
     public static function get_description() {
         return get_string('description', 'blocktype.linkedinprofile');
+    }
+
+    public static function get_css_icon() {
+        return 'linkedin-square';
     }
 
     public static function get_categories() {
@@ -220,8 +224,8 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
             $params = array(
                 'response_type' => 'code',
                 'client_id'     => $consumer->key,
-			    // As of February 12th 2015 do not pass optional parameter 'scope' anymore.
-				// More info: https://developer.linkedin.com/support/developer-program-transition#troubleshooting
+                // As of February 12th 2015 do not pass optional parameter 'scope' anymore.
+                // More info: https://developer.linkedin.com/support/developer-program-transition#troubleshooting
                 //'scope'         => 'r_fullprofile r_emailaddress r_contactinfo rw_groups',
                 'state'         => 'newaccesstoken',
                 'redirect_uri'  => $consumer->callback,
@@ -306,8 +310,8 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                 $params = array(
                     'response_type' => 'code',
                     'client_id'     => $consumer->key,
-			    	// As of February 12th 2015 do not pass optional parameter 'scope' anymore.
-			    	// More info: https://developer.linkedin.com/support/developer-program-transition#troubleshooting
+                    // As of February 12th 2015 do not pass optional parameter 'scope' anymore.
+                    // More info: https://developer.linkedin.com/support/developer-program-transition#troubleshooting
                     //'scope'         => 'r_fullprofile r_emailaddress r_contactinfo rw_groups',
                     'state'         => $referring_page,
                     'redirect_uri'  => $consumer->callback,
@@ -349,10 +353,14 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                 $token = unserialize($data->value);
                 switch ($type) {
                     case 'fullprofile':
-                        $fields = ':(first-name,last-name,formatted-name,headline,location:(name),picture-url,picture-urls::(original),public-profile-url,member-url-resources,num-connections,three-current-positions,three-past-positions,summary,specialties,positions,languages,educations,skills,group-memberships)';
+                        //$fields = ':(first-name,last-name,formatted-name,headline,location:(name),picture-url,picture-urls::(original),public-profile-url,member-url-resources,num-connections,three-current-positions,three-past-positions,summary,specialties,positions,languages,educations,skills,group-memberships)';
+                        // SEE: https://developer.linkedin.com/support/developer-program-transition#hero-par_longformtext_longform-text-content-par_resourceparagraph_5
+                        $fields = ':(first-name,last-name,formatted-name,headline,location:(name),picture-url,picture-urls::(original),public-profile-url,num-connections,three-current-positions,three-past-positions,summary,specialties,positions,languages,educations,skills,group-memberships)';
                         break;
                     case 'contactinfo':
-                        $fields = ':(first-name,last-name,formatted-name,headline,location:(name),picture-url,picture-urls::(original),public-profile-url,member-url-resources,email-address,phone-numbers,main-address,primary-twitter-account)';
+                        //$fields = ':(first-name,last-name,formatted-name,headline,location:(name),picture-url,picture-urls::(original),public-profile-url,member-url-resources,email-address,phone-numbers,main-address,primary-twitter-account)';
+                        // SEE: https://developer.linkedin.com/support/developer-program-transition#hero-par_longformtext_longform-text-content-par_resourceparagraph_5
+                        $fields = ':(first-name,last-name,formatted-name,headline,location:(name),picture-url,picture-urls::(original),public-profile-url,email-address)';
                         break;
                     case 'basicprofile':
                     default:
@@ -373,7 +381,9 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                     CURLOPT_CAINFO => dirname(__FILE__) . '/cert/cacert.crt'
                 );
                 $result = mahara_http_request($config);
-                if ($result->info['http_code'] == 200 && !empty($result->data)) {
+                if (isset($result->data) && !empty($result->data) &&
+                    isset($result->info) && !empty($result->info) &&
+                    $result->info['http_code'] == 200) {
                     $data = oauth_parse_xml($result->data);
                     return $data;
                 }
@@ -391,5 +401,3 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
     }
 
 }
-
-?>

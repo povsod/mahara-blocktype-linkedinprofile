@@ -5,14 +5,12 @@
  * @subpackage blocktype-linkedinprofile
  * @author     Gregor Anzelj
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 2014 Gregor Anzelj, gregor.anzelj@gmail.com
+ * @copyright  (C) 2014-2016 Gregor Anzelj, info@povsod.com
  *
  */
 
 defined('INTERNAL') || die();
 
 $config = new StdClass;
-$config->version = 2015052300;
-$config->release = '15.04.0';
-
-?>
+$config->version = 2015122500;
+$config->release = '15.12.0';
