@@ -7,18 +7,40 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 2014-2016 Gregor Anzelj, info@povsod.com
  *
+ *
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
+ *
+ *    The MIT License for OAuth Examples
+ *    Copyright (c) 2010 Joe Chung - joechung at yahoo dot com
+ *
+ *    OAuth Examples code also contains software derived from the PHP OAuth Library
+ *    Copyright 2007 Andy Smith:
+ *
+ *    MIT License - for PHP OAuth Library
+ *    Copyright © 2007 Andy Smith
+ *
+ *    Permission is hereby granted, free of charge, to any person obtaining a copy
+ *    of this software and associated documentation files (the "Software"), to deal
+ *    in the Software without restriction, including without limitation the rights
+ *    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *    copies of the Software, and to permit persons to whom the Software is
+ *    furnished to do so, subject to the following conditions:
+ *
+ *    The above copyright notice and this permission notice shall be included in
+ *    all copies or substantial portions of the Software.
+ *
+ *    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *    THE SOFTWARE.
+ *
  */
 
 defined('INTERNAL') || die();
-
-// If Cloud plugin is installed then use that OAuth library
-if (file_exists(get_config('docroot') . 'artefact/cloud/lib/oauth.php')) {
-    require_once(get_config('docroot') . 'artefact/cloud/lib/oauth.php');
-}
-// otherwise use local OAuth library
-else {
-    require_once('oauth.php');
-}
 
 
 class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
@@ -230,7 +252,7 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                 'state'         => 'newaccesstoken',
                 'redirect_uri'  => $consumer->callback,
             );
-            redirect($consumer->oauthurl . 'authorization?' . oauth_http_build_query($params));
+            redirect($consumer->oauthurl . 'authorization?' . self::oauth_http_build_query($params));
         }
         else {
             throw new ConfigException('Can\'t find LinkedIn api key and/or secret key.');
@@ -252,9 +274,9 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                 'client_id'     => $consumer->key,
                 'client_secret' => $consumer->secret,
             );
-            $query = oauth_http_build_query($params);
+            $query = self::oauth_http_build_query($params);
             $header = array();
-            $header[] = build_oauth_header($params, "LinkedIn API PHP Client");
+            $header[] = self::build_oauth_header($params, "LinkedIn API PHP Client");
             $header[] = 'Content-Length: ' . strlen($query);
             $header[] = 'Content-Type: application/x-www-form-urlencoded';
             $config = array(
@@ -301,22 +323,24 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
         $consumer = self::get_service_consumer();
         if (!empty($consumer->key) && !empty($consumer->secret)) {
             $data = get_record('usr_account_preference', 'usr', $USER->get('id'), 'field', 'linkedinprofile');
-            $token = unserialize($data->value);
-            // Find out access token expiration and take away 10 seconds
-            // to avoid access token expiry problems between API calls...
-            $valid = intval($token['timestamp']) + intval($token['expires_in']) - 10;
-            $now = time();
-            if ($valid < $now) {
-                $params = array(
-                    'response_type' => 'code',
-                    'client_id'     => $consumer->key,
-                    // As of February 12th 2015 do not pass optional parameter 'scope' anymore.
-                    // More info: https://developer.linkedin.com/support/developer-program-transition#troubleshooting
-                    //'scope'         => 'r_fullprofile r_emailaddress r_contactinfo rw_groups',
-                    'state'         => $referring_page,
-                    'redirect_uri'  => $consumer->callback,
-                );
-                redirect($consumer->oauthurl . 'authorization?' . oauth_http_build_query($params));
+            if ($data) {
+                $token = unserialize($data->value);
+                // Find out access token expiration and take away 10 seconds
+                // to avoid access token expiry problems between API calls...
+                $valid = intval($token['timestamp']) + intval($token['expires_in']) - 10;
+                $now = time();
+                if ($valid < $now) {
+                    $params = array(
+                        'response_type' => 'code',
+                        'client_id'     => $consumer->key,
+                        // As of February 12th 2015 do not pass optional parameter 'scope' anymore.
+                        // More info: https://developer.linkedin.com/support/developer-program-transition#troubleshooting
+                        //'scope'         => 'r_fullprofile r_emailaddress r_contactinfo rw_groups',
+                        'state'         => $referring_page,
+                        'redirect_uri'  => $consumer->callback,
+                    );
+                    redirect($consumer->oauthurl . 'authorization?' . self::oauth_http_build_query($params));
+                }
             }
         }
         else {
@@ -340,7 +364,6 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
     public function get_user_profile($type='basicprofile', $owner=null) {
         global $USER, $SESSION;
         $referring_page = basename($_SERVER['SCRIPT_NAME']) . '?' . $_SERVER['QUERY_STRING'];
-        // TODO: check if that really works
         self::check_access_token($referring_page);
         $consumer = self::get_service_consumer();
         if (!$owner) {
@@ -372,7 +395,7 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                 $port = $consumer->ssl ? '443' : '80';
                 $params = array('oauth2_access_token' => $token['access_token']);
                 $config = array(
-                    CURLOPT_URL => $url.'?'.oauth_http_build_query($params),
+                    CURLOPT_URL => $url.'?'.self::oauth_http_build_query($params),
                     CURLOPT_PORT => $port,
                     CURLOPT_POST => false,
                     CURLOPT_RETURNTRANSFER => true,
@@ -384,7 +407,7 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
                 if (isset($result->data) && !empty($result->data) &&
                     isset($result->info) && !empty($result->info) &&
                     $result->info['http_code'] == 200) {
-                    $data = oauth_parse_xml($result->data);
+                    $data = self::oauth_parse_xml($result->data);
                     return $data;
                 }
                 else {
@@ -398,6 +421,107 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
         else {
             throw new ConfigException('Can\'t find LinkedIn api key and/or secret key.');
         }
+    }
+
+    /***************************************************
+     * OAuth helper methods for accessing LinkedIn API *
+     ***************************************************/
+
+    /**
+     * Build a query parameter string according to OAuth Spec.
+     * @param array $params an array of query parameters
+     * @return string all the query parameters properly sorted and encoded
+     * according to the OAuth spec, or an empty string if params is empty.
+     * @link http://oauth.net/core/1.0/#rfc.section.9.1.1
+     */
+    private function oauth_http_build_query($params, $excludeOauthParams=false) {
+      $query_string = '';
+      if (! empty($params)) {
+
+        // rfc3986 encode both keys and values
+        $keys = self::rfc3986_encode(array_keys($params));
+        $values = self::rfc3986_encode(array_values($params));
+        $params = array_combine($keys, $values);
+
+        // Parameters are sorted by name, using lexicographical byte value ordering.
+        // http://oauth.net/core/1.0/#rfc.section.9.1.1
+        uksort($params, 'strcmp');
+
+        // Turn params array into an array of "key=value" strings
+        $kvpairs = array();
+        foreach ($params as $k => $v) {
+          if ($excludeOauthParams && substr($k, 0, 5) == 'oauth') {
+            continue;
+          }
+          if (is_array($v)) {
+            // If two or more parameters share the same name,
+            // they are sorted by their value. OAuth Spec: 9.1.1 (1)
+            natsort($v);
+            foreach ($v as $value_for_same_key) {
+              array_push($kvpairs, ($k . '=' . $value_for_same_key));
+            }
+          } else {
+            // For each parameter, the name is separated from the corresponding
+            // value by an '=' character (ASCII code 61). OAuth Spec: 9.1.1 (2)
+            array_push($kvpairs, ($k . '=' . $v));
+          }
+        }
+
+        // Each name-value pair is separated by an '&' character, ASCII code 38.
+        // OAuth Spec: 9.1.1 (2)
+        $query_string = implode('&', $kvpairs);
+      }
+
+      return $query_string;
+    }
+
+    /**
+     * Parse a xml string into an array.
+     * @param string $xml_string an OAuth xml string response
+     * @return array an array of parameters
+     */
+    private function oauth_parse_xml($xml_string) {
+      $xml = simplexml_load_string($xml_string);
+      $json = json_encode($xml);
+      $array = json_decode($json, true);
+        
+      return $array;
+    }
+
+    /**
+     * Build an OAuth header for API calls
+     * @param array $params an array of query parameters
+     * @return string encoded for insertion into HTTP header of API call
+     */
+    private function build_oauth_header($params, $realm='') {
+      $header = 'Authorization: OAuth realm="' . $realm . '"';
+      foreach ($params as $k => $v) {
+        if (substr($k, 0, 5) == 'oauth') {
+          $header .= ',' . rfc3986_encode($k) . '="' . rfc3986_encode($v) . '"';
+        }
+      }
+      return $header;
+    }
+
+    /**
+     * Encode input per RFC 3986
+     * @param string|array $raw_input
+     * @return string|array properly rfc3986 encoded raw_input
+     * If an array is passed in, rfc3896 encode all elements of the array.
+     * @link http://oauth.net/core/1.0/#encoding_parameters
+     */
+    private function rfc3986_encode($raw_input) {
+      if (is_array($raw_input)) {
+        return array_map('self::rfc3986_encode', $raw_input);
+      } else if (is_scalar($raw_input)) {
+        return str_replace('%7E', '~', rawurlencode($raw_input));
+      } else {
+        return '';
+      }
+    }
+
+    private function rfc3986_decode($raw_input) {
+      return rawurldecode($raw_input);
     }
 
 }
