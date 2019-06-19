@@ -53,7 +53,7 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
         return get_string('description', 'blocktype.linkedinprofile');
     }
 
-    public static function get_css_icon() {
+    public static function get_css_icon($blocktypename) {
         return 'linkedin-square';
     }
 
@@ -61,7 +61,7 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
         return array('internal');
     }
 
-    public static function render_instance(BlockInstance $instance, $editing=false) {
+    public static function render_instance(BlockInstance $instance, $editing=false, $versioning=false) {
         $configdata = $instance->get('configdata');
         $type  = (isset($configdata['linkedindata']) ? $configdata['linkedindata'] : 'basicprofile');
         $owner = $instance->get_view()->get('owner');
@@ -76,7 +76,7 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
         return true;
     }
 
-    public static function instance_config_form($instance) {
+    public static function instance_config_form(BlockInstance $instance) {
         global $USER, $THEME;
         $configdata = $instance->get('configdata');
         $data = get_record('usr_account_preference', 'usr', $USER->get('id'), 'field', 'linkedinprofile');
@@ -205,7 +205,7 @@ class PluginBlocktypeLinkedinprofile extends SystemBlocktype {
         );
     }
 
-    public static function save_config_options($form, $values) {
+    public static function save_config_options(Pieform $form, $values) {
         set_config_plugin('blocktype', 'linkedinprofile', 'apikey', $values['apikey']);
         set_config_plugin('blocktype', 'linkedinprofile', 'secretkey', $values['secretkey']);
     }
